@@ -9,7 +9,7 @@ public interface IOrderBook {
 
     void addOrder(Order order);
 
-    void removeOrder(String orderId, String stockSymbol);
+    boolean removeOrder(String orderId, String stockSymbol);
 
     boolean updateOrder(Order updatedOrder);
 

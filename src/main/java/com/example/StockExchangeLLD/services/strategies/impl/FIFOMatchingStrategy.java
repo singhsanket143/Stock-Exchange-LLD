@@ -35,7 +35,7 @@ public class FIFOMatchingStrategy implements OrderMatchingStrategy{
 
         List<Order> matchingSellOrders = existingOrders.stream()
                                         .filter(order -> order.getOrderType() == OrderType.SELL)
-                                        .filter(order -> order.getStockId().equals(buyOrder.getStockId()))
+                                        .filter(order -> order.getStockSymbol().equals(buyOrder.getStockSymbol()))
                                         .filter(order -> order.getPrice() <= buyOrder.getPrice())
                                         .filter(order -> order.getOrderStatus() == OrderStatus.ACCEPTED)
                                         .sorted(Comparator.comparing(Order::getPrice).thenComparing(Order::getOrderAcceptedTimeStamp))
@@ -53,7 +53,7 @@ public class FIFOMatchingStrategy implements OrderMatchingStrategy{
             Trade trade = Trade.builder()
                           .buyerOrderId(buyOrder.getOrderId())
                           .sellerOrderId(sellOrder.getOrderId())
-                          .stockId(buyOrder.getStockId())
+                          .stockId(buyOrder.getStockSymbol())
                           .quantity(tradeQuantity)
                           .price(tradePrice)
                           .build();
