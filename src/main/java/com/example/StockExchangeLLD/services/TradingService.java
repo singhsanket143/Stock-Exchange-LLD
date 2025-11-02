@@ -26,6 +26,7 @@ public class TradingService {
     
     private final IOrderBook orderBook;
     private final OrderMatchingStrategy orderMatchingStrategy;
+    private final TradeService tradeService;
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     public Order placOrder(Order order) {
@@ -60,14 +61,15 @@ public class TradingService {
         if(!executedTrades.isEmpty()) {
             for(Trade trade : executedTrades) {
                 // save trades in the db
+                tradeService.saveTrade(trade);
             }
 
-            orderBook.updateOrder(newOrder);
+            // orderBook.updateOrder(newOrder);
 
-            for(Trade trade : executedTrades) {
-                String otherOrderId = newOrder.getOrderType() == OrderType.BUY ? trade.getSellerOrderId() : trade.getBuyerOrderId();
-                orderBook.getOrderByOrderId(otherOrderId).ifPresent(orderBook::updateOrder);
-            }
+            // for(Trade trade : executedTrades) {
+            //     String otherOrderId = newOrder.getOrderType() == OrderType.BUY ? trade.getSellerOrderId() : trade.getBuyerOrderId();
+            //     orderBook.getOrderByOrderId(otherOrderId).ifPresent(orderBook::updateOrder);
+            // }
 
             log.info("Order matched successfully");
         }

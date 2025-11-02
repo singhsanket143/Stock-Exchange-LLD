@@ -53,7 +53,7 @@ public class FIFOMatchingStrategy implements OrderMatchingStrategy{
             Trade trade = Trade.builder()
                           .buyerOrderId(buyOrder.getOrderId())
                           .sellerOrderId(sellOrder.getOrderId())
-                          .stockId(buyOrder.getStockSymbol())
+                          .stockSymbol(buyOrder.getStockSymbol())
                           .quantity(tradeQuantity)
                           .price(tradePrice)
                           .build();
