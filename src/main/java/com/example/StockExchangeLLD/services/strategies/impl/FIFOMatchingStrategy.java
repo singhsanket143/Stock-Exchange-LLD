@@ -70,7 +70,7 @@ public class FIFOMatchingStrategy implements OrderMatchingStrategy{
 
             remainingQuantity -= tradeQuantity;
 
-            log.info("Trade: {} - {} - {} - {} - {} - {} - {} - {}", trade.getTradeId(), trade.getBuyerOrderId(), trade.getSellerOrderId(), trade.getStockId(), trade.getQuantity(), trade.getPrice(), buyOrder.getFilledQuantity(), buyOrder.getRemainingQuantity(), sellOrder.getFilledQuantity(), sellOrder.getRemainingQuantity());
+            log.info("Trade: {} - {} - {} - {} - {} - {} - {} - {}", trade.getTradeId(), trade.getBuyerOrderId(), trade.getSellerOrderId(), trade.getStockSymbol(), trade.getQuantity(), trade.getPrice(), buyOrder.getFilledQuantity(), buyOrder.getRemainingQuantity(), sellOrder.getFilledQuantity(), sellOrder.getRemainingQuantity());
 
         }
 

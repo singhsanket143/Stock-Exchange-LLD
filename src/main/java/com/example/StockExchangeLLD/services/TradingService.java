@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.example.StockExchangeLLD.data.IOrderBook;
+import com.example.StockExchangeLLD.dtos.OrderRequest;
 import com.example.StockExchangeLLD.models.Order;
 import com.example.StockExchangeLLD.models.OrderStatus;
-import com.example.StockExchangeLLD.models.OrderType;
 import com.example.StockExchangeLLD.models.Trade;
 import com.example.StockExchangeLLD.services.strategies.OrderMatchingStrategy;
 
@@ -26,10 +26,19 @@ public class TradingService {
     
     private final IOrderBook orderBook;
     private final OrderMatchingStrategy orderMatchingStrategy;
-    private final TradeService tradeService;
+    private final TradeService tradeService; // violated DIP, TODO: fix this
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-    public Order placOrder(Order order) {
+    public Order placeOrder(OrderRequest orderRequest) {
+        Order order = Order.builder()
+        .userId(orderRequest.getUserId())
+        .orderType(orderRequest.getOrderType())
+        .stockSymbol(orderRequest.getStockSymbol())
+        .quantity(orderRequest.getQuantity())
+        .price(orderRequest.getPrice())
+        .build();
+
+
         // TODO: validations 
 
         order.setOrderAcceptedTimeStamp(LocalDateTime.now());
@@ -73,6 +82,10 @@ public class TradingService {
 
             log.info("Order matched successfully");
         }
+    }
+
+    public List<Order> getOrderBook(String symbol) {
+        return orderBook.getOrders(symbol);
     }
 
 
