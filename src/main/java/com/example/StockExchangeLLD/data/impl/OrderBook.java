@@ -2,6 +2,7 @@ package com.example.StockExchangeLLD.data.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -106,6 +107,27 @@ public class OrderBook implements IOrderBook {
         } finally {
             lock.readLock().unlock();
         }
+    }
+
+    public Optional<Order> getOrderByOrderId(String orderId) {
+
+        for(Map.Entry<String, List<Order>> entry : orderBook.entrySet()) {
+            String stockSymbol = entry.getKey();
+            ReadWriteLock lock = getOrCreateLock(stockSymbol);
+            lock.readLock().lock();
+
+            try {
+                List<Order> orders = entry.getValue();
+                for(Order order : orders) {
+                    if(order.getOrderId().equals(orderId)) {
+                        return Optional.of(order);
+                    }
+                }
+            } finally {
+                lock.readLock().unlock();
+            }
+        }
+        return Optional.empty();
     }
 
     private ReadWriteLock getOrCreateLock(String stockSymbol) {
