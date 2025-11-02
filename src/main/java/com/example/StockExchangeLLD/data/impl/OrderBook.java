@@ -9,12 +9,17 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.springframework.stereotype.Component;
+
 import com.example.StockExchangeLLD.data.IOrderBook;
 import com.example.StockExchangeLLD.models.Order;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class OrderBook implements IOrderBook {
 
     

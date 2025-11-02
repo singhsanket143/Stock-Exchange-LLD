@@ -59,13 +59,20 @@ public class TradingService {
     }
 
     private void executeOrderMatch(Order newOrder) {
+        log.info("Executing order match for order: {}", newOrder.getOrderId());
         String stockSymbol = newOrder.getStockSymbol();
 
         List<Order> existingOrders = orderBook.getOrders(stockSymbol);
 
         existingOrders = existingOrders.stream().filter(order -> !order.getOrderId().equals(newOrder.getOrderId())).collect(Collectors.toList());
 
+
+        log.info("Existing orders: {}", existingOrders.size());
+
+
         List<Trade> executedTrades = orderMatchingStrategy.matchOrders(newOrder, existingOrders);
+
+        log.info("Executed trades: {}", executedTrades.size());
 
         if(!executedTrades.isEmpty()) {
             for(Trade trade : executedTrades) {
