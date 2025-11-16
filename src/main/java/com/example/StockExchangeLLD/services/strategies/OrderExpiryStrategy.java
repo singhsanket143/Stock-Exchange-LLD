@@ -4,5 +4,5 @@ import com.example.StockExchangeLLD.models.Order;
 
 public interface OrderExpiryStrategy {
     
-    void checkExpiry(Order order);
+    boolean checkExpiry(Order order);
 }

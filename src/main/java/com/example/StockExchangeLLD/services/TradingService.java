@@ -14,6 +14,7 @@ import com.example.StockExchangeLLD.dtos.OrderRequest;
 import com.example.StockExchangeLLD.models.Order;
 import com.example.StockExchangeLLD.models.OrderStatus;
 import com.example.StockExchangeLLD.models.Trade;
+import com.example.StockExchangeLLD.services.strategies.OrderExpiryStrategy;
 import com.example.StockExchangeLLD.services.strategies.OrderMatchingStrategy;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class TradingService {
     
     private final IOrderBook orderBook;
     private final OrderMatchingStrategy orderMatchingStrategy;
+    private final OrderExpiryStrategy orderExpiryStrategy;
     private final TradeService tradeService; // violated DIP, TODO: fix this
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
@@ -63,6 +65,10 @@ public class TradingService {
         String stockSymbol = newOrder.getStockSymbol();
 
         List<Order> existingOrders = orderBook.getOrders(stockSymbol);
+
+        existingOrders = existingOrders.stream().filter(
+            order -> !orderExpiryStrategy.checkExpiry(order)
+        ).collect(Collectors.toList()); // remove expired orders
 
         existingOrders = existingOrders.stream().filter(order -> !order.getOrderId().equals(newOrder.getOrderId())).collect(Collectors.toList());
 
